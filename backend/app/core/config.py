@@ -5,6 +5,8 @@ from functools import lru_cache
 
 class Settings(BaseSettings):
     """Application configuration loaded from environment variables."""
+    
+    # Force reload to pick up new CORS origins
 
     model_config = SettingsConfigDict(
         env_file=".env",
@@ -23,7 +25,7 @@ class Settings(BaseSettings):
     API_V1_PREFIX: str = "/api/v1"
     API_HOST: str = "0.0.0.0"
     API_PORT: int = 8000
-    CORS_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:8000"]
+    CORS_ORIGINS: str = "http://localhost:3000,http://localhost:8000,http://localhost:3001,http://localhost:3002"
 
     # Security
     JWT_SECRET_KEY: str

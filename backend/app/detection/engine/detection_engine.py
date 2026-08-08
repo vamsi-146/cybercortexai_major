@@ -2,15 +2,15 @@
 
 from typing import Dict, Any, List, Optional
 from datetime import datetime
-from .rules.base import BaseDetectionRule
-from .rules.brute_force import BruteForceRule
-from .rules.success_after_failures import SuccessAfterFailuresRule
-from .rules.port_scan import PortScanRule
-from .rules.multiple_host_scan import MultipleHostScanRule
-from .rules.suspicious_powershell import SuspiciousPowerShellRule
-from .rules.privileged_group_modification import PrivilegedGroupModificationRule
-from .rules.new_account_privilege_escalation import NewAccountPrivilegeEscalationRule
-from .rules.account_lockout_burst import AccountLockoutBurstRule
+from ..rules.base import BaseDetectionRule
+from ..rules.brute_force import BruteForceRule
+from ..rules.success_after_failures import SuccessAfterFailuresRule
+from ..rules.port_scan import PortScanRule
+from ..rules.multiple_host_scan import MultipleHostScanRule
+from ..rules.suspicious_powershell import SuspiciousPowerShellRule
+from ..rules.privileged_group_modification import PrivilegedGroupModificationRule
+from ..rules.new_account_privilege_escalation import NewAccountPrivilegeEscalationRule
+from ..rules.account_lockout_burst import AccountLockoutBurstRule
 
 
 class DetectionEngine:

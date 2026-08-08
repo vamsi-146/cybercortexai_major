@@ -11,6 +11,16 @@ export interface Incident {
   created_at: string
   updated_at: string
   assigned_to?: string
+  alert_ids?: string[]
+  alert_count?: number
+  event_ids?: string[]
+  affected_assets?: any[]
+  affected_users?: string[]
+  affected_ips?: string[]
+  mitre_techniques?: string[]
+  timeline?: any[]
+  indicators?: any[]
+  recommendations?: string[]
 }
 
 export interface IncidentCreate {

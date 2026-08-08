@@ -2,6 +2,8 @@ from pydantic import BaseModel, Field
 from typing import Optional, List, Generic, TypeVar
 from enum import Enum
 
+T = TypeVar('T')
+
 
 class Severity(str, Enum):
     CRITICAL = "CRITICAL"
@@ -60,8 +62,8 @@ class Criticality(str, Enum):
     LOW = "LOW"
 
 
-class PaginatedResponse(BaseModel, Generic[TypeVar]):
-    items: List[TypeVar]
+class PaginatedResponse(BaseModel, Generic[T]):
+    items: List[T]
     page: int
     page_size: int
     total: int

@@ -4,6 +4,7 @@ from app.database.mongodb import get_database
 from app.repositories.user_repository import UserRepository
 from app.repositories.audit_repository import AuditLogRepository
 from app.schemas.user import UserCreate, UserLogin, Token, User
+from app.schemas.audit import AuditLogCreate
 from app.core.security import verify_password, create_access_token, create_refresh_token, decode_token
 from app.schemas.audit import AuditAction, ResourceType
 from app.api.dependencies.auth import get_current_user
@@ -40,13 +41,13 @@ async def register(user_data: UserCreate, db = Depends(get_database)):
     
     # Log audit
     audit_repo = AuditLogRepository(db)
-    await audit_repo.create({
-        "username": user["username"],
-        "action": AuditAction.CREATE,
-        "resource_type": ResourceType.USER,
-        "resource_id": user["id"],
-        "result": "SUCCESS"
-    })
+    await audit_repo.create(AuditLogCreate(
+        username=user["username"],
+        action=AuditAction.CREATE,
+        resource_type=ResourceType.USER,
+        resource_id=user["id"],
+        result="SUCCESS"
+    ))
     
     return User(**user)
 
@@ -61,13 +62,13 @@ async def login(user_credentials: UserLogin, db = Depends(get_database)):
     user = await user_repo.get_by_email(user_credentials.email)
     if not user:
         # Log failed attempt
-        await audit_repo.create({
-            "username": user_credentials.email,
-            "action": AuditAction.LOGIN,
-            "resource_type": ResourceType.USER,
-            "resource_id": "unknown",
-            "result": "FAILURE"
-        })
+        await audit_repo.create(AuditLogCreate(
+            username=user_credentials.email,
+            action=AuditAction.LOGIN,
+            resource_type=ResourceType.USER,
+            resource_id="unknown",
+            result="FAILURE"
+        ))
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid email or password"
@@ -76,13 +77,13 @@ async def login(user_credentials: UserLogin, db = Depends(get_database)):
     # Verify password
     if not verify_password(user_credentials.password, user["password_hash"]):
         # Log failed attempt
-        await audit_repo.create({
-            "username": user["username"],
-            "action": AuditAction.LOGIN,
-            "resource_type": ResourceType.USER,
-            "resource_id": user["id"],
-            "result": "FAILURE"
-        })
+        await audit_repo.create(AuditLogCreate(
+            username=user["username"],
+            action=AuditAction.LOGIN,
+            resource_type=ResourceType.USER,
+            resource_id=user["id"],
+            result="FAILURE"
+        ))
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid email or password"
@@ -111,14 +112,14 @@ async def login(user_credentials: UserLogin, db = Depends(get_database)):
     })
     
     # Log successful login
-    await audit_repo.create({
-        "user_id": user["id"],
-        "username": user["username"],
-        "action": AuditAction.LOGIN,
-        "resource_type": ResourceType.USER,
-        "resource_id": user["id"],
-        "result": "SUCCESS"
-    })
+    await audit_repo.create(AuditLogCreate(
+        user_id=user["id"],
+        username=user["username"],
+        action=AuditAction.LOGIN,
+        resource_type=ResourceType.USER,
+        resource_id=user["id"],
+        result="SUCCESS"
+    ))
     
     logger.info(f"User logged in: {user['email']}")
     return Token(access_token=access_token, refresh_token=refresh_token)
@@ -174,14 +175,14 @@ async def logout(current_user: dict = Depends(get_current_user), db = Depends(ge
     # In a production system, you might want to invalidate tokens in a blacklist
     # For Phase 2, we just log the logout action
     audit_repo = AuditLogRepository(db)
-    await audit_repo.create({
-        "user_id": current_user["id"],
-        "username": current_user["username"],
-        "action": AuditAction.LOGOUT,
-        "resource_type": ResourceType.USER,
-        "resource_id": current_user["id"],
-        "result": "SUCCESS"
-    })
+    await audit_repo.create(AuditLogCreate(
+        user_id=current_user["id"],
+        username=current_user["username"],
+        action=AuditAction.LOGOUT,
+        resource_type=ResourceType.USER,
+        resource_id=current_user["id"],
+        result="SUCCESS"
+    ))
     
     logger.info(f"User logged out: {current_user['email']}")
     return {"message": "Successfully logged out"}

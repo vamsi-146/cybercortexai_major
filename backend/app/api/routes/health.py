@@ -1,4 +1,4 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from app.database.mongodb import MongoDB, get_database
 from app.core.config import get_settings
 import logging

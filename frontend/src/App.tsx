@@ -5,6 +5,8 @@ import { Sidebar } from '@components/layout/Sidebar'
 import { TopBar } from '@components/layout/TopBar'
 import { Dashboard } from '@pages/Dashboard'
 import { IncidentDetail } from '@pages/IncidentDetail'
+import { EventsPage } from '@pages/EventsPage'
+import { AlertsPage } from '@pages/AlertsPage'
 import { LoginPage } from '@pages/LoginPage'
 
 function App() {
@@ -23,6 +25,8 @@ function App() {
                     <TopBar />
                     <Routes>
                       <Route path="/" element={<Dashboard />} />
+                      <Route path="/events" element={<EventsPage />} />
+                      <Route path="/alerts" element={<AlertsPage />} />
                       <Route path="/incidents/:id" element={<IncidentDetail />} />
                       {/* Add more routes as pages are implemented */}
                     </Routes>

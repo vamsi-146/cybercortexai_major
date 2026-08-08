@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from typing import Optional, Dict, Any
-from python_jose import JWTError, jwt
+from jose import JWTError, jwt
 from passlib.context import CryptContext
 from app.core.config import get_settings
 import logging

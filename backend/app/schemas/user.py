@@ -46,6 +46,10 @@ class User(UserInDB):
         from_attributes = True
 
 
+# Alias for backwards compatibility
+UserResponse = User
+
+
 class UserLogin(BaseModel):
     email: EmailStr
     password: str

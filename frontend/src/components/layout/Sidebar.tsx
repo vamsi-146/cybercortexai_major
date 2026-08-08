@@ -24,6 +24,7 @@ const navSections: NavSection[] = [
   {
     title: 'THREAT OPERATIONS',
     items: [
+      { icon: 'Database', label: 'Events', path: '/events' },
       { icon: 'AlertTriangle', label: 'Alerts', path: '/alerts' },
       { icon: 'FileText', label: 'Incidents', path: '/incidents' },
       { icon: 'Search', label: 'Investigations', path: '/investigations' },

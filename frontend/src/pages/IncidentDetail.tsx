@@ -3,12 +3,15 @@ import { Link, useParams } from 'react-router-dom'
 import { ArrowLeft, Clock, Shield, Target, FileText, Network, MessageSquare, Activity, ChevronRight } from 'lucide-react'
 import { SeverityBadge } from '@components/ui/SeverityBadge'
 import { LoadingState } from '@components/ui/LoadingState'
+import { AlertEvidence } from '@components/alerts/AlertEvidence'
 import { incidentsApi } from '@services/api/incidentsApi'
+import { alertsApi, Alert } from '@services/api/alertsApi'
 
 export function IncidentDetail() {
   const { id } = useParams<{ id: string }>()
   const [activeTab, setActiveTab] = useState('overview')
   const [incident, setIncident] = useState<any>(null)
+  const [alerts, setAlerts] = useState<Alert[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
@@ -23,6 +26,19 @@ export function IncidentDetail() {
       setLoading(true)
       const data = await incidentsApi.getById(incidentId)
       setIncident(data)
+      
+      // Load related alerts if alert_ids exist
+      if (data.alert_ids && data.alert_ids.length > 0) {
+        try {
+          const alertPromises = data.alert_ids.map((alertId: string) => 
+            alertsApi.getById(alertId).catch(() => null)
+          )
+          const loadedAlerts = await Promise.all(alertPromises)
+          setAlerts(loadedAlerts.filter((a: Alert | null): a is Alert => a !== null))
+        } catch (err) {
+          console.error('Failed to load alerts:', err)
+        }
+      }
     } catch (err) {
       console.error('Failed to load incident:', err)
       setError('Failed to load incident')
@@ -354,10 +370,30 @@ export function IncidentDetail() {
             )}
 
             {activeTab === 'evidence' && (
-              <div className="card-base p-8 text-center">
-                <Shield className="w-12 h-12 text-gray-500 mx-auto mb-4" />
-                <h3 className="text-lg font-semibold text-gray-100 mb-2">Evidence Collection Coming Soon</h3>
-                <p className="text-sm text-gray-400">Automated evidence collection will be available in Phase 4</p>
+              <div className="space-y-4">
+                {alerts.length > 0 ? (
+                  alerts.map((alert) => (
+                    <div key={alert.id} className="card-base p-4">
+                      <div className="panel-header border-b-0 mb-3">
+                        <h2 className="panel-title">
+                          <Shield className="w-4 h-4 text-primary" />
+                          Alert: {alert.title}
+                        </h2>
+                        <span className="text-xs text-gray-400">{alert.alert_id}</span>
+                      </div>
+                      <AlertEvidence 
+                        detectionEvidence={(alert as any).detection_evidence}
+                        correlationData={(alert as any).correlation_data}
+                      />
+                    </div>
+                  ))
+                ) : (
+                  <div className="card-base p-8 text-center">
+                    <Shield className="w-12 h-12 text-gray-500 mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold text-gray-100 mb-2">No Alerts Found</h3>
+                    <p className="text-sm text-gray-400">This incident has no associated alerts with detection evidence</p>
+                  </div>
+                )}
               </div>
             )}
           </div>
