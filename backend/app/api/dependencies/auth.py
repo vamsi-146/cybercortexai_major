@@ -51,6 +51,10 @@ async def get_current_user(
             detail="User account is disabled"
         )
     
+    # Ensure user has id field
+    if "id" not in user and "_id" in user:
+        user["id"] = str(user["_id"])
+    
     return user
 
 

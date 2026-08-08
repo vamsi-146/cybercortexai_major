@@ -120,7 +120,7 @@ export function LoginPage() {
           <div className="mt-6 p-3 bg-surface-elevated border border-border rounded-sm">
             <p className="text-xs text-gray-400 mb-1">Demo Credentials:</p>
             <p className="text-xs text-mono text-gray-300">Email: admin@cybercortex.ai</p>
-            <p className="text-xs text-mono text-gray-300">Password: AdminPass123!</p>
+            <p className="text-xs text-mono text-gray-300">Password: admin123</p>
           </div>
         </div>
 

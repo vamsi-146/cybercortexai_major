@@ -96,28 +96,31 @@ async def login(user_credentials: UserLogin, db = Depends(get_database)):
             detail="User account is disabled"
         )
     
+    # Get user ID
+    user_id = user.get("id") or str(user.get("_id"))
+    
     # Update last login
-    await user_repo.update_last_login(user["id"])
+    await user_repo.update_last_login(user_id)
     
     # Create tokens
     access_token = create_access_token({
-        "sub": user["id"],
+        "sub": user_id,
         "email": user["email"],
         "role": user["role"]
     })
     refresh_token = create_refresh_token({
-        "sub": user["id"],
+        "sub": user_id,
         "email": user["email"],
         "role": user["role"]
     })
     
     # Log successful login
     await audit_repo.create(AuditLogCreate(
-        user_id=user["id"],
+        user_id=user_id,
         username=user["username"],
         action=AuditAction.LOGIN,
         resource_type=ResourceType.USER,
-        resource_id=user["id"],
+        resource_id=user_id,
         result="SUCCESS"
     ))
     
