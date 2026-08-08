@@ -1,0 +1,201 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-gray-100 font-sans antialiased;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    @apply w-2 h-2;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-surface;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-border-light rounded-sm;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-primary;
+  }
+}
+
+@layer components {
+  /* Grid background pattern */
+  .bg-grid {
+    background-image: 
+      linear-gradient(to right, rgba(6, 182, 212, 0.03) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(6, 182, 212, 0.03) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+
+  /* Scan line effect */
+  .scan-line {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .scan-line::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(to right, transparent, rgba(6, 182, 212, 0.3), transparent);
+    animation: scan 3s linear infinite;
+  }
+
+  /* Card base */
+  .card-base {
+    @apply bg-surface border border-border rounded-sm shadow-card;
+  }
+
+  /* Card hover */
+  .card-hover {
+    @apply transition-all duration-200 hover:border-border-light hover:shadow-glow-sm;
+  }
+
+  /* Panel header */
+  .panel-header {
+    @apply flex items-center justify-between px-4 py-3 border-b border-border bg-surface-elevated;
+  }
+
+  /* Panel title */
+  .panel-title {
+    @apply text-sm font-semibold text-gray-100 flex items-center gap-2;
+  }
+
+  /* Metric card */
+  .metric-card {
+    @apply card-base p-4 card-hover;
+  }
+
+  /* Status indicator */
+  .status-dot {
+    @apply w-2 h-2 rounded-full;
+  }
+
+  .status-dot-critical {
+    @apply bg-critical animate-pulse;
+  }
+
+  .status-dot-high {
+    @apply bg-high;
+  }
+
+  .status-dot-medium {
+    @apply bg-medium;
+  }
+
+  .status-dot-low {
+    @apply bg-low;
+  }
+
+  .status-dot-success {
+    @apply bg-success;
+  }
+
+  .status-dot-info {
+    @apply bg-info;
+  }
+
+  /* Badge base */
+  .badge {
+    @apply px-2 py-0.5 text-xs font-medium rounded-sm inline-flex items-center gap-1;
+  }
+
+  .badge-critical {
+    @apply bg-critical/10 text-critical border border-critical/20;
+  }
+
+  .badge-high {
+    @apply bg-high/10 text-high border border-high/20;
+  }
+
+  .badge-medium {
+    @apply bg-medium/10 text-medium border border-medium/20;
+  }
+
+  .badge-low {
+    @apply bg-low/10 text-low border border-low/20;
+  }
+
+  .badge-info {
+    @apply bg-info/10 text-info border border-info/20;
+  }
+
+  /* Table base */
+  .table-base {
+    @apply w-full text-sm;
+  }
+
+  .table-base th {
+    @apply px-4 py-2 text-left text-xs font-medium text-gray-400 uppercase tracking-wider border-b border-border;
+  }
+
+  .table-base td {
+    @apply px-4 py-2 border-b border-border text-gray-300;
+  }
+
+  .table-base tr:hover td {
+    @apply bg-surface-elevated;
+  }
+
+  /* Input base */
+  .input-base {
+    @apply bg-surface border border-border rounded-sm px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary;
+  }
+
+  /* Button base */
+  .btn-primary {
+    @apply bg-primary hover:bg-primary-dark text-white px-4 py-2 rounded-sm text-sm font-medium transition-colors duration-200;
+  }
+
+  .btn-secondary {
+    @apply bg-surface-elevated hover:bg-surface-higher border border-border text-gray-100 px-4 py-2 rounded-sm text-sm font-medium transition-colors duration-200;
+  }
+
+  /* Pipeline stage */
+  .pipeline-stage {
+    @apply flex items-center gap-3 px-4 py-3 bg-surface border border-border rounded-sm;
+  }
+
+  .pipeline-stage-active {
+    @apply border-primary/50 shadow-glow-sm;
+  }
+
+  /* Agent card */
+  .agent-card {
+    @apply flex items-center gap-3 p-3 bg-surface border border-border rounded-sm;
+  }
+
+  .agent-card-running {
+    @apply border-primary/30 bg-primary/5;
+  }
+
+  /* Chart container */
+  .chart-container {
+    @apply w-full h-48;
+  }
+
+  /* Monospace text */
+  .text-mono {
+    @apply font-mono text-xs;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
